@@ -1,0 +1,138 @@
+
+<html>
+	<head>
+		<title> Awesome</title>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<link href="style.css" rel="stylesheet">
+	</head>
+	
+<body>
+
+<div id="memechat"> <p id="p">My Chat </p><p id="pr"> By Vas9ka</p></div> 
+<br>
+<br>
+<div id="holder">
+	<form id="messageForm">
+						
+
+			<input type="text" id="messageInput" placeholder="Type..."/>
+			<button type="submit"  id="btn" onclick="hidel()"> Send </button>
+
+	</form>
+	
+	<div class="chat" id="chat" style="overflow-y:scroll; height:450px;">
+
+	
+<div id="messageBox">
+
+</div>
+</div>
+
+	
+	
+	</div>
+<button type="submit"  id="btn1" onclick="showl()"> Show All </button>
+<div id="people" style="overflow-y:scroll; height:450px;">
+</body>
+
+
+
+
+
+
+<script>
+var socket = io.connect();  //connects to socket
+$(function(){
+var $people = $("#people");
+
+var $messageForm = $("#messageForm"); //ref to the div message form
+var $messageInput = $("#messageInput"); //ref to input box with id message
+var $chat = $("#chat"); //ref to div chat
+
+$messageForm.submit(function(e){
+e.preventDefault();
+socket.emit("send meme message", $messageInput.val());
+$messageInput.val("");
+
+
+});
+socket.on("new meme message", function(data){
+
+const objs = new Array('ты', 'нуб', 'олень', 'животное', 'мда', 'хех', 'кек');
+const defs = new Array('Красный', 'Огромный', 'Деревянный', 'Лесной', 'Хороший', 'Плохой', 'Злой');
+const verbs = new Array('спит', 'орет', 'ест', 'бегает');
+function arrayRandElement(arr) {
+    var rand = Math.floor(Math.random() * arr.length);
+    return arr[rand];
+}
+function getRandomAnswer() {
+    return (arrayRandElement(defs) + ' ' + arrayRandElement(objs) + ' ' + arrayRandElement(verbs))
+}
+if(data.msg.length > 0){
+$chat.append('<div id="circle"> ' + '<textarea id="t" readonly>' + data.msg + '</textarea>'+ '<svg viewPort="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" id="x"> <line x1="1" y1="11" x2="11" y2="1" stroke="black"  stroke-width="2"/> <line x1="1" y1="1" x2="11" y2="11" stroke="black" stroke-width="2"/> </svg>'+' </div>');
+$chat.append('<div id="circleanswer"> ' + '<textarea id="t" readonly>' + getRandomAnswer() +'</textarea>'+ '<svg viewPort="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" id="x"> <line x1="1" y1="11" x2="11" y2="1" stroke="black"  stroke-width="2"/> <line x1="1" y1="1" x2="11" y2="11" stroke="black" stroke-width="2"/> </svg>'+ ' </div>')
+
+}
+
+});
+$chat.on('click',"#x",function(){
+    $(this).closest('#circle').remove();
+})
+$chat.on('click',"#x",function(){
+    $(this).closest('#circleanswer').remove();
+})
+socket.on("new memer", function(data){
+
+$people.append('<br>'  +'<div id="circle1"> ' + ' </div>' + '<br>' );
+
+});
+
+socket.on("memer left", function(data){
+ 
+
+$("#circle1").remove();
+  
+
+});
+});
+
+
+
+
+
+
+showlog = false;
+window.setInterval(function() {
+if(showlog == false){
+  var chat = document.getElementById("chat");
+  chat.scrollTop = chat.scrollHeight;
+  
+  var people = document.getElementById("people");
+  people.scrollTop = people.scrollHeight;
+  }
+}, 4);
+
+function showl(){
+showlog = true;
+
+}
+function hidel(){
+var chat = document.getElementById("chat");
+  chat.scrollTop = chat.scrollHeight;
+  var people = document.getElementById("people");
+  people.scrollTop = people.scrollHeight;
+showlog = false;
+}
+
+
+
+
+  
+
+
+
+</script>
+
+</html>	
+
